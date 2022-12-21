@@ -8,10 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="green">#4BC802</color>
+    <color name="red">#D50000</color>
     <color name="brown">#784415</color>
     <color name="light_brown">#705237</color>
     <color name="blue">#0B57DC</color>
     <color name="background_blue">#6F09367C</color>
+    <color name="answer_color">#0B57DC</color>
     <color name="yellow">#FFD600</color>
     <color name="grey">#E4E6EA</color>
     <color name="default_color">#808080</color>

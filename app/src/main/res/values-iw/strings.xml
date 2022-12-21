@@ -2,8 +2,11 @@
 <resources>
     <string name="app_name">Software Quiz Time</string>
     <string name="Play">שחק</string>
-    <string name="Hint">רמז</string>
     <string name="Answer">תשובה</string>
     <string name="Points">נקודות</string>
-    <string name="Question">0/25</string>
+    <string name="Question">0/5</string>
+    <string name="Of5">/5</string>
+    <string name="OK">אישור</string>
+    <string name="Finish">סיום</string>
+    <string name="GameOver">המשחק הסתיים, נקודות שנצברו: </string>
 </resources>
