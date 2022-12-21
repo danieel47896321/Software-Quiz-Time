@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Software Quiz Time</string>
     <string name="Play">Play</string>
+    <string name="Hint">Hint</string>
+    <string name="Answer">Answer</string>
+    <string name="Points">Points</string>
+    <string name="Question">0/25</string>
 </resources>

@@ -2,4 +2,8 @@
 <resources>
     <string name="app_name">Software Quiz Time</string>
     <string name="Play">שחק</string>
+    <string name="Hint">רמז</string>
+    <string name="Answer">תשובה</string>
+    <string name="Points">נקודות</string>
+    <string name="Question">0/25</string>
 </resources>
