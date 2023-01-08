@@ -1,109 +1,96 @@
 package com.example.softwarequiztime
-import android.app.AlertDialog
+
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import com.example.softwarequiztime.Class.MyQuestion
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import com.example.softwarequiztime.controller.PlayController
+import com.example.softwarequiztime.model.PlayModel
 
 class Play : AppCompatActivity() {
-    private lateinit var questionListArray: ArrayList<MyQuestion>
-    private var index = 0
-    private var curPoints = 0
     private lateinit var points : TextView
     private lateinit var question : TextView
-    private lateinit var answer1 : TextView
-    private lateinit var answer2 : TextView
-    private lateinit var answer3 : TextView
-    private lateinit var answer4 : TextView
+    private lateinit var textViewAnswer1 : TextView
+    private lateinit var textViewAnswer2 : TextView
+    private lateinit var textViewAnswer3 : TextView
+    private lateinit var textViewAnswer4 : TextView
+    private lateinit var cardViewAnswer1 : CardView
+    private lateinit var cardViewAnswer2 : CardView
+    private lateinit var cardViewAnswer3 : CardView
+    private lateinit var cardViewAnswer4 : CardView
     private lateinit var image : ImageView
-    private lateinit var answer1CardView : CardView
-    private lateinit var answer2CardView : CardView
-    private lateinit var answer3CardView : CardView
-    private lateinit var answer4CardView : CardView
+    private lateinit var playModel: PlayModel
+    private lateinit var playController: PlayController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
         init()
     }
     private fun init(){
-        questionListArray = ArrayList<MyQuestion>()
+        playModel = ViewModelProvider(this)[PlayModel::class.java]
+        playController = PlayController(playModel, this)
         points = findViewById(R.id.points)
         question = findViewById(R.id.question)
-        answer1 = findViewById(R.id.answer1)
-        answer2 = findViewById(R.id.answer2)
-        answer3 = findViewById(R.id.answer3)
-        answer4 = findViewById(R.id.answer4)
-        answer1CardView = findViewById(R.id.answer1CardView)
-        answer2CardView = findViewById(R.id.answer2CardView)
-        answer3CardView = findViewById(R.id.answer3CardView)
-        answer4CardView = findViewById(R.id.answer4CardView)
+        textViewAnswer1 = findViewById(R.id.textViewAnswer1)
+        textViewAnswer2 = findViewById(R.id.textViewAnswer2)
+        textViewAnswer3 = findViewById(R.id.textViewAnswer3)
+        textViewAnswer4 = findViewById(R.id.textViewAnswer4)
+        cardViewAnswer1 = findViewById(R.id.cardViewAnswer1)
+        cardViewAnswer2 = findViewById(R.id.cardViewAnswer2)
+        cardViewAnswer3 = findViewById(R.id.cardViewAnswer3)
+        cardViewAnswer4 = findViewById(R.id.cardViewAnswer4)
         image = findViewById(R.id.image)
-        setQuestions()
+        playController.setView()
+        setAnswers()
     }
-    private fun setQuestions(){
-        questionListArray.add(MyQuestion(R.drawable.android,"Android","Apple","Asus","Nokia","Android"))
-        questionListArray.add(MyQuestion(R.drawable.apple,"Windows","Android","Apple","Microsoft","Apple"))
-        questionListArray.add(MyQuestion(R.drawable.java,"Java","Python","C++","Kotlin","Java"))
-        questionListArray.add(MyQuestion(R.drawable.kotlin,"Python","C","C++","Kotlin","Kotlin"))
-        questionListArray.add(MyQuestion(R.drawable.python,"Kotlin","Python","Java","C","Python"))
-        showQuestions()
-        setButtonOnClick(answer1, answer1CardView)
-        setButtonOnClick(answer2, answer2CardView)
-        setButtonOnClick(answer3, answer3CardView)
-        setButtonOnClick(answer4, answer4CardView)
-    }
-    private fun showQuestions(){
-        val p = resources.getString(R.string.Points)
-        val q = resources.getString(R.string.Of5)
-        points.text = "$curPoints ${p}"
-        question.text = "${index+1}${q}"
-        image.setImageDrawable(resources.getDrawable(questionListArray[index].image))
-        resetAnswerBackground(answer1)
-        resetAnswerBackground(answer2)
-        resetAnswerBackground(answer3)
-        resetAnswerBackground(answer4)
-        answer1.text = questionListArray[index].q1
-        answer2.text = questionListArray[index].q2
-        answer3.text = questionListArray[index].q3
-        answer4.text = questionListArray[index].q4
-    }
-    private fun resetAnswerBackground(answer: TextView) {
-        answer.setBackgroundColor(resources.getColor(R.color.answer_color))
-    }
-    private fun setButtonOnClick(answer: TextView, answerCardView: CardView) {
-        answerCardView.setOnClickListener{
-            if(!questionListArray[index].isClicked) {
-                questionListArray[index].isClicked = true
-                if (answer.text == questionListArray[index].correctAnswer) {
-                    answer.setBackgroundColor(resources.getColor(R.color.green))
-                    curPoints += 10
-                    val q = resources.getString(R.string.Of5)
-                    question.text = "${index+1}${q}"
-                } else {
-                    answer.setBackgroundColor(resources.getColor(R.color.red))
-                }
-                Handler().postDelayed({
-                    if(index < questionListArray.size - 1) {
-                        index++
-                        showQuestions()
-                    }else {
-                        val p = resources.getString(R.string.Points)
-                        points.text = "$curPoints ${p}"
-                        engGameMsg()
-                    }
-                }, 500)
-            }
+    private fun setAnswers() {
+        cardViewAnswer1.setOnClickListener {
+            val color = playController.checkAnswer(textViewAnswer1.text.toString())
+            selectedAnswer(textViewAnswer1, color)
+        }
+        cardViewAnswer2.setOnClickListener {
+            val color = playController.checkAnswer(textViewAnswer2.text.toString())
+            selectedAnswer(textViewAnswer2, color)
+        }
+        cardViewAnswer3.setOnClickListener {
+            val color = playController.checkAnswer(textViewAnswer3.text.toString())
+            selectedAnswer(textViewAnswer3, color)
+        }
+        cardViewAnswer4.setOnClickListener {
+            val color = playController.checkAnswer(textViewAnswer4.text.toString())
+            selectedAnswer(textViewAnswer4, color)
         }
     }
-    private fun engGameMsg() {
+    private fun selectedAnswer(textView: TextView, color: Int){
+        if(playController.checkColor(color)) {
+            textView.setBackgroundColor(color)
+            playController.nextQuestion()
+        }
+    }
+    fun setQuestion(currentPoints: String, questionNumber: String, answer1: String, answer2: String, answer3: String, answer4: String, currentImage: Int) {
+        points.text = currentPoints
+        question.text = questionNumber
+        image.setImageDrawable(ContextCompat.getDrawable(this,currentImage))
+        setAnswer(textViewAnswer1, answer1)
+        setAnswer(textViewAnswer2, answer2)
+        setAnswer(textViewAnswer3, answer3)
+        setAnswer(textViewAnswer4, answer4)
+    }
+    private fun setAnswer(textView: TextView, answer: String){
+        textView.text = answer
+        textView.setBackgroundColor(ContextCompat.getColor(this, R.color.blue))
+    }
+    fun engGameMsg(title: String, message: String) {
         val builder = AlertDialog.Builder(this, R.style.AlertDialog)
-        builder.setTitle(resources.getString(R.string.Finish))
-        builder.setMessage("${resources.getString(R.string.GameOver)} $curPoints")
+        builder.setTitle(title)
+        builder.setMessage(message)
         builder.setPositiveButton(R.string.OK) { _, _ -> onBackPressed() }
+        builder.setCancelable(false)
         builder.show()
     }
     override fun onBackPressed() {

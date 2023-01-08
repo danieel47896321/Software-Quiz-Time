@@ -8,4 +8,15 @@
     <string name="OK">OK</string>
     <string name="Finish">Finish</string>
     <string name="GameOver">The Game is Over, Number of Points: </string>
+    <string name="Android">Android</string>
+    <string name="Apple">Apple</string>
+    <string name="Asus">Asus</string>
+    <string name="Nokia">Nokia</string>
+    <string name="Windows">Windows</string>
+    <string name="Microsoft">Microsoft</string>
+    <string name="Java">Java</string>
+    <string name="Python">Python</string>
+    <string name="C">C</string>
+    <string name="Cplusplus">C++</string>
+    <string name="Kotlin">Kotlin</string>
 </resources>

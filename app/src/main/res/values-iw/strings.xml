@@ -9,4 +9,15 @@
     <string name="OK">אישור</string>
     <string name="Finish">סיום</string>
     <string name="GameOver">המשחק הסתיים, נקודות שנצברו: </string>
+    <string name="Android">אנדרואיד</string>
+    <string name="Apple">אפל</string>
+    <string name="Asus">אסוס</string>
+    <string name="Nokia">נוקיה</string>
+    <string name="Windows">ווינדוס</string>
+    <string name="Microsoft">מיקרוסופט</string>
+    <string name="Java">גאווה</string>
+    <string name="Python">פייתון</string>
+    <string name="C">סי</string>
+    <string name="Cplusplus">סי++</string>
+    <string name="Kotlin">קוטלין</string>
 </resources>
