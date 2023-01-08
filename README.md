@@ -4,7 +4,7 @@ Rules of the Game:
 
 The Game reveals image and you have to pick the correct answer.
 
-Each corrent answer is worth 10 points.
+Each corrent answer worth 10 points.
 
 Implemented MVC architecture.
 
