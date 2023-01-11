@@ -2,25 +2,27 @@ package com.example.softwarequiztime.controller
 
 import android.os.Handler
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.softwarequiztime.myClass.MyQuestion
 import com.example.softwarequiztime.Play
 import com.example.softwarequiztime.R
 import com.example.softwarequiztime.model.PlayModel
 
-class PlayController(var playModel: PlayModel, var view: Play) {
+class PlayController(var view: Play) {
+    private var playModel = ViewModelProvider(view)[PlayModel::class.java]
     fun setView() {
-        setQuestions()
-        val currentPoints = "${playModel.points} ${view.resources.getString(R.string.Points)}"
-        val questionNumber = "${playModel.questionNumber+1}${view.resources.getString(R.string.Of5)}"
-        val currentImage = playModel.questionListArray[playModel.questionNumber].image
-        val answer1 = playModel.questionListArray[playModel.questionNumber].answer1
-        val answer2 = playModel.questionListArray[playModel.questionNumber].answer2
-        val answer3 = playModel.questionListArray[playModel.questionNumber].answer3
-        val answer4 = playModel.questionListArray[playModel.questionNumber].answer4
-        view.setQuestion(currentPoints, questionNumber, answer1, answer2, answer3, answer4, currentImage)
+        if(playModel.questionListArray.isEmpty())
+            setQuestions()
+        view.mainWhenCase(playModel.questionsID)
     }
+    fun getAnswer1(): String{ return playModel.questionListArray[playModel.questionNumber].answer1 }
+    fun getAnswer2(): String{ return playModel.questionListArray[playModel.questionNumber].answer2 }
+    fun getAnswer3(): String{ return playModel.questionListArray[playModel.questionNumber].answer3 }
+    fun getAnswer4(): String{ return playModel.questionListArray[playModel.questionNumber].answer4 }
+    fun getCurrentPoints(): String{ return "${playModel.points} ${view.resources.getString(R.string.Points)}" }
+    fun getQuestionNumber(): String{ return "${playModel.questionNumber+1}${view.resources.getString(R.string.Of5)}" }
+    fun getCurrentImage(): Int{ return playModel.questionListArray[playModel.questionNumber].image }
     private fun setQuestions() {
-        playModel.questionListArray.clear()
         playModel.questionListArray.add(MyQuestion(R.drawable.android, view.resources.getString(R.string.Android), view.resources.getString(R.string.Apple), view.resources.getString(R.string.Asus), view.resources.getString(R.string.Nokia), view.resources.getString(R.string.Android)))
         playModel.questionListArray.add(MyQuestion(R.drawable.apple, view.resources.getString(R.string.Windows), view.resources.getString(R.string.Android), view.resources.getString(R.string.Apple), view.resources.getString(R.string.Microsoft), view.resources.getString(R.string.Apple)))
         playModel.questionListArray.add(MyQuestion(R.drawable.java, view.resources.getString(R.string.Java), view.resources.getString(R.string.Python), view.resources.getString(R.string.Cplusplus), view.resources.getString(R.string.Kotlin), view.resources.getString(R.string.Java)))
@@ -44,10 +46,8 @@ class PlayController(var playModel: PlayModel, var view: Play) {
         if(playModel.questionListArray[playModel.questionNumber].isClicked) {
             Handler().postDelayed({
                 if(playModel.questionNumber == playModel.questionListArray.size - 1) {
-                    val title = view.resources.getString(R.string.Finish)
-                    val message = "${view.resources.getString(R.string.GameOver)} ${playModel.points}"
                     setView()
-                    view.engGameMsg(title, message)
+                    view.mainWhenCase(playModel.endGameID)
                     resetGame()
                 }else {
                     playModel.questionNumber++
@@ -61,4 +61,6 @@ class PlayController(var playModel: PlayModel, var view: Play) {
         playModel.questionNumber = 0
         playModel.questionListArray.clear()
     }
+    fun getEndGameTitle(): String{ return view.resources.getString(R.string.Finish) }
+    fun getEndGameText(): String{ return "${view.resources.getString(R.string.GameOver)} ${playModel.points}" }
 }

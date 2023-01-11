@@ -8,11 +8,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.example.softwarequiztime.controller.PlayController
-import com.example.softwarequiztime.model.PlayModel
 
 class Play : AppCompatActivity() {
+    private lateinit var playController: PlayController
     private lateinit var points : TextView
     private lateinit var question : TextView
     private lateinit var textViewAnswer1 : TextView
@@ -24,16 +23,13 @@ class Play : AppCompatActivity() {
     private lateinit var cardViewAnswer3 : CardView
     private lateinit var cardViewAnswer4 : CardView
     private lateinit var image : ImageView
-    private lateinit var playModel: PlayModel
-    private lateinit var playController: PlayController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play)
         init()
     }
     private fun init(){
-        playModel = ViewModelProvider(this)[PlayModel::class.java]
-        playController = PlayController(playModel, this)
+        playController = PlayController(this)
         points = findViewById(R.id.points)
         question = findViewById(R.id.question)
         textViewAnswer1 = findViewById(R.id.textViewAnswer1)
@@ -47,6 +43,12 @@ class Play : AppCompatActivity() {
         image = findViewById(R.id.image)
         playController.setView()
         setAnswers()
+    }
+    fun mainWhenCase(id: String){
+        when(id){
+            "setQuestion" -> { setQuestion(playController.getCurrentPoints(), playController.getQuestionNumber(), playController.getAnswer1(), playController.getAnswer2(), playController.getAnswer3(), playController.getAnswer4(), playController.getCurrentImage()) }
+            "engGameMsg" -> { engGameMsg(playController.getEndGameTitle(), playController.getEndGameText()) }
+        }
     }
     private fun setAnswers() {
         cardViewAnswer1.setOnClickListener {
@@ -72,7 +74,7 @@ class Play : AppCompatActivity() {
             playController.nextQuestion()
         }
     }
-    fun setQuestion(currentPoints: String, questionNumber: String, answer1: String, answer2: String, answer3: String, answer4: String, currentImage: Int) {
+    private fun setQuestion(currentPoints: String, questionNumber: String, answer1: String, answer2: String, answer3: String, answer4: String, currentImage: Int) {
         points.text = currentPoints
         question.text = questionNumber
         image.setImageDrawable(ContextCompat.getDrawable(this,currentImage))
@@ -85,7 +87,7 @@ class Play : AppCompatActivity() {
         textView.text = answer
         textView.setBackgroundColor(ContextCompat.getColor(this, R.color.blue))
     }
-    fun engGameMsg(title: String, message: String) {
+    private fun engGameMsg(title: String, message: String) {
         val builder = AlertDialog.Builder(this, R.style.AlertDialog)
         builder.setTitle(title)
         builder.setMessage(message)

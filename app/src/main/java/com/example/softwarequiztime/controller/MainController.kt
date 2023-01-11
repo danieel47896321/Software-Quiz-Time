@@ -4,7 +4,7 @@ import com.example.softwarequiztime.MainActivity
 import com.example.softwarequiztime.Play
 
 class MainController(var view: MainActivity) {
-    fun newGame() {
-        view.startNewGame(Play::class.java)
+    fun newGameDest(): Class<Play> {
+        return (Play::class.java)
     }
 }

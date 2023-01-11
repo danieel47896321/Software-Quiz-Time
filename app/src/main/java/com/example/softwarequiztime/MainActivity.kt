@@ -21,10 +21,10 @@ class MainActivity : AppCompatActivity() {
     }
     private fun setPlayButton(){
         playButton.setOnClickListener{
-            mainController.newGame()
+            startNewGame(mainController.newGameDest())
         }
     }
-    fun startNewGame(dest: Class<Play>) {
+    private fun startNewGame(dest: Class<Play>) {
         startActivity(Intent(this, dest))
         finish()
     }
